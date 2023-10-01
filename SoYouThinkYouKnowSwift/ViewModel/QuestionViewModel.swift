@@ -25,7 +25,7 @@ class QuestionViewModel: ObservableObject {
             print(selectedDifficulty!)
         }
     }
-    @Published private var categories: [String: Int] = ["Sports 🏀": 21, "Animals 🦁" : 27, "Books 📖": 10,
+    private var categories: [String: Int] = ["Sports 🏀": 21, "Animals 🦁" : 27, "Books 📖": 10,
                                                         "Film 🎥": 11, "Music 🎼": 12, "Vehicles 🚗": 28]
     
     
@@ -49,12 +49,17 @@ class QuestionViewModel: ObservableObject {
                 return data
             }
             .decode(type: QuestionModel.self, decoder: JSONDecoder())
-            .sink { (completion) in
-                print("Complete: \(completion)")
-            } receiveValue: { [weak self] questions in
+            
+            .map { [weak self] questions in
                 self?.questionModel = questions.results
                 completion()
             }
+            .catch {error -> Just<Void> in
+                print("Error \(error)")
+                completion()
+                return Just(())
+            }
+            .sink(receiveValue: { _ in })
             .store(in: &cancelable)
 
     }

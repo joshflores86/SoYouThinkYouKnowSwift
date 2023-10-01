@@ -21,17 +21,15 @@ class MainView: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
     
-    var cancelable: AnyCancellable?
-    var answer: AnswerModel?
-    var index: Int = 0
-    var buttonTitles: [String] = []
-    var choiceButton: [UIButton] = []
-    var selectedButton = AnswerModel(answer: "", isCorrect: false)
-    var testChoices: [AnswerModel] = []
-    var readyForResults: Bool = false
+    private lazy var index: Int = 0
+    private lazy var buttonTitles: [String] = []
+    private lazy var choiceButton: [UIButton] = []
+    private lazy var selectedButton = AnswerModel(answer: "", isCorrect: false)
+    private lazy var testChoices: [AnswerModel] = []
+    private lazy var readyForResults: Bool = false
     
     
-    var questionLabel: UILabel = {
+    lazy var questionLabel: UILabel = {
         
         var questions = UILabel()
         
@@ -43,15 +41,7 @@ class MainView: UIViewController {
         return questions
     }()
     
-    func questionLabelContraint() {
-        let leading = questionLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20)
-        let top = questionLabel.topAnchor.constraint(equalTo: newTitle.bottomAnchor, constant: 10)
-        let width = questionLabel.widthAnchor.constraint(equalToConstant: 350)
-        let height = questionLabel.heightAnchor.constraint(equalToConstant: 250)
-        NSLayoutConstraint.activate([leading, top, width, height])
-    }
-    
-    var choices: [UIButton] = {
+    lazy var choices: [UIButton] = {
         
         var answers = [UIButton]()
         
@@ -60,7 +50,7 @@ class MainView: UIViewController {
         return answers
     }()
     
-    var newTitle: UILabel = {
+    lazy var newTitle: UILabel = {
         let title = UILabel()
         title.text = "So You Think You Know?!"
         title.font = .systemFont(ofSize: 25, weight: .bold)
@@ -70,17 +60,8 @@ class MainView: UIViewController {
         title.translatesAutoresizingMaskIntoConstraints = false
         return title
     }()
-    
-    func newTitleConstraint() {
-        let leading = newTitle.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 10)
-        let bottom = newTitle.topAnchor.constraint(equalTo: view.topAnchor, constant: 25)
-        let width = newTitle.widthAnchor.constraint(equalToConstant: 175)
-        let height = newTitle.heightAnchor.constraint(equalToConstant: 100)
-        
-        NSLayoutConstraint.activate([leading, bottom, width, height])
-    }
-    
-    var progressLabel: UILabel = {
+      
+    lazy var progressLabel: UILabel = {
         let label = UILabel()
         
         label.textAlignment = .right
@@ -90,24 +71,7 @@ class MainView: UIViewController {
         return label
     }()
     
-    func progresLabelConstraint() {
-        let leading = progressLabel.leadingAnchor.constraint(equalTo: newTitle.trailingAnchor, constant: 20)
-        let bottom = progressLabel.topAnchor.constraint(equalTo: view.topAnchor, constant: 60)
-        let width = progressLabel.widthAnchor.constraint(equalToConstant: 175)
-        let height = progressLabel.heightAnchor.constraint(equalToConstant: 20)
-        
-        NSLayoutConstraint.activate([leading, bottom, width, height])
-    }
-    
-    func setTitle() {/* if let navigationBar = navigationController?.navigationBar {
-                      let titleAttributes: [NSAttributedString.Key: Any] = [
-                      .font: UIFont.systemFont(ofSize: 30, weight: .heavy),
-                      .foregroundColor: UIColor.black
-                      ]
-                      navigationBar.titleTextAttributes = titleAttributes
-                      }*/}
-    
-    var nextButton: UIButton = {
+    lazy var nextButton: UIButton = {
         var next = UIButton()
         next.setTitle("NEXT", for: .normal)
         next.backgroundColor = .blue
@@ -117,6 +81,54 @@ class MainView: UIViewController {
         
         return next
     }()
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        self.navigationItem.hidesBackButton = true
+        view.backgroundColor = .systemMint
+        nextButton.addTarget(self, action: #selector(nextQuestion), for: .touchUpInside)
+        
+        self.view.addSubview(questionLabel)
+        self.view.addSubview(nextButton)
+        self.view.addSubview(newTitle)
+        self.view.addSubview(progressLabel)
+        
+        progresLabelConstraint()
+        newTitleConstraint()
+        questionLabelContraint()
+        nextButtonConstraint()
+        
+        vm.getData {
+            self.updateUI()
+            
+        }
+    }
+    
+    func questionLabelContraint() {
+        let leading = questionLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20)
+        let top = questionLabel.topAnchor.constraint(equalTo: newTitle.bottomAnchor, constant: 10)
+        let width = questionLabel.widthAnchor.constraint(equalToConstant: 350)
+        let height = questionLabel.heightAnchor.constraint(equalToConstant: 250)
+        NSLayoutConstraint.activate([leading, top, width, height])
+    }
+    
+    func newTitleConstraint() {
+        let leading = newTitle.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 10)
+        let bottom = newTitle.topAnchor.constraint(equalTo: view.topAnchor, constant: 25)
+        let width = newTitle.widthAnchor.constraint(equalToConstant: 175)
+        let height = newTitle.heightAnchor.constraint(equalToConstant: 100)
+        
+        NSLayoutConstraint.activate([leading, bottom, width, height])
+    }
+
+    func progresLabelConstraint() {
+        let leading = progressLabel.leadingAnchor.constraint(equalTo: newTitle.trailingAnchor, constant: 20)
+        let bottom = progressLabel.topAnchor.constraint(equalTo: view.topAnchor, constant: 60)
+        let width = progressLabel.widthAnchor.constraint(equalToConstant: 175)
+        let height = progressLabel.heightAnchor.constraint(equalToConstant: 20)
+        
+        NSLayoutConstraint.activate([leading, bottom, width, height])
+    }
     
     func nextButtonConstraint() {
         let leading = nextButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 150)
@@ -162,34 +174,6 @@ class MainView: UIViewController {
         }
         
     }
-    
-    
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        self.navigationItem.hidesBackButton = true
-        //       self.title = "SO YOU THINK YOU KNOW"
-        //       setTitle()
-        view.backgroundColor = .systemMint
-        nextButton.addTarget(self, action: #selector(nextQuestion), for: .touchUpInside)
-        
-        self.view.addSubview(questionLabel)
-        self.view.addSubview(nextButton)
-        self.view.addSubview(newTitle)
-        self.view.addSubview(progressLabel)
-        
-        progresLabelConstraint()
-        newTitleConstraint()
-        questionLabelContraint()
-        nextButtonConstraint()
-        
-        vm.getData {
-            self.updateUI()
-            
-        }
-    }
-    
-    
     
     @objc func nextQuestion() {
         if index >= 9 {
@@ -242,6 +226,7 @@ class MainView: UIViewController {
             button.isEnabled = false
         }
     }
+    
     
 }
 

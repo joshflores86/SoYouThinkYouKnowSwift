@@ -10,9 +10,9 @@ import Combine
 
 class FirstView: UIViewController {
    
-    private var vm = QuestionViewModel()
+    private lazy var vm = QuestionViewModel()
     
-    private var mainTitle: UILabel = {
+    private lazy var mainTitle: UILabel = {
         let title = UILabel()
         title.text = "So You Think You Know?!"
         title.font = .systemFont(ofSize: 40, weight: .heavy)
@@ -28,17 +28,7 @@ class FirstView: UIViewController {
         return title
     }()
     
-    private func mainTitleConstraint() {
-        let leading = mainTitle.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 30)
-        let top = mainTitle.topAnchor.constraint(equalTo: view.topAnchor, constant: 20)
-        let width = mainTitle.widthAnchor.constraint(equalToConstant: 350)
-        let heigth = mainTitle.heightAnchor.constraint(equalToConstant: 350)
-        
-        NSLayoutConstraint.activate([leading, top, width, heigth])
-        
-    }
-    
-    private var startButton: UIButton = {
+    private lazy var startButton: UIButton = {
         let start = UIButton()
         start.setTitle("Start", for: .normal)
         start.layer.cornerRadius = 7
@@ -50,27 +40,7 @@ class FirstView: UIViewController {
         return start
     }()
     
-    @objc func startQuiz() {
-        let main = MainView(vm: vm)
-        
-        self.vm.selectedCategory = selectedCategory.text!
-        self.vm.score = 0
-        self.navigationController?.pushViewController(main, animated: true)
-
-        
-    }
-    
-    private func startButtonConstraint() {
-        let center = startButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 150)
-        let bottom = startButton.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -30)
-        let width = startButton.widthAnchor.constraint(equalToConstant: 100)
-        let heigth = startButton.heightAnchor.constraint(equalToConstant: 40)
-        
-        NSLayoutConstraint.activate([center, bottom, width, heigth])
-        
-    }
-    
-    private var quizCategory: UIButton = {
+    private lazy var quizCategory: UIButton = {
         
         let categoryButton = UIButton()
         categoryButton.setTitle("Category", for: .normal)
@@ -84,49 +54,7 @@ class FirstView: UIViewController {
         return categoryButton
     }()
     
-    private func quizCategoryConstraint() {
-        let leading = quizCategory.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 30)
-        let top = quizCategory.topAnchor.constraint(equalTo: mainTitle.bottomAnchor, constant: 20)
-        let width = quizCategory.widthAnchor.constraint(equalToConstant: 150)
-        let heigth = quizCategory.heightAnchor.constraint(equalToConstant: 80)
-        
-        NSLayoutConstraint.activate([leading, top, width, heigth])
-        
-    }
-    
-    @objc private func chooseCategory() -> UIMenu {
-
-            let category = UIMenu(title: "", options: .displayInline, children: [
-                UIAction(title: "🏀 Sports") { _ in
-                    self.vm.selectedCategory = "Sports 🏀"
-                    
-                },
-                UIAction(title: "🦁 Animals") { _ in
-                    self.vm.selectedCategory = "🦁 Animals"
-                    self.selectedCategory.text = self.vm.selectedCategory
-                    
-                },
-                UIAction(title: "📖 Books") { _ in
-                    self.vm.selectedCategory = "📖 Books"
-                    self.selectedCategory.text = self.vm.selectedCategory
-                },
-                UIAction(title: "🎥 Film") { _ in
-                    self.vm.selectedCategory = "🎥 Film"
-                    self.selectedCategory.text = self.vm.selectedCategory
-                },
-                UIAction(title: "🎼 Music") { _ in
-                    self.vm.selectedCategory = "🎼 Music"
-                    self.selectedCategory.text = self.vm.selectedCategory
-                },
-                UIAction(title: "🚗 Vehicles") { _ in
-                    self.vm.selectedCategory = "🚗 Vehicles"
-                    self.selectedCategory.text = self.vm.selectedCategory
-                }
-            ])
-            return category
-    }
-    
-    private var selectedCategory: UILabel = {
+    private lazy var selectedCategory: UILabel = {
         
         var selected = UILabel()
         
@@ -138,17 +66,7 @@ class FirstView: UIViewController {
         return selected
     }()
     
-    private func selectedCategoryConstraint() {
-        let leading = selectedCategory.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 30)
-        let top = selectedCategory.topAnchor.constraint(equalTo: quizCategory.bottomAnchor, constant: 0)
-        let width = selectedCategory.widthAnchor.constraint(equalToConstant: 150)
-        let heigth = selectedCategory.heightAnchor.constraint(equalToConstant: 40)
-        
-        NSLayoutConstraint.activate([leading, top, width, heigth])
-        
-    }
-    
-    private var quizDifficulty: UIButton = {
+    private lazy var quizDifficulty: UIButton = {
         let categoryButton = UIButton()
         categoryButton.setTitle("Difficulty", for: .normal)
         categoryButton.setTitleColor(UIColor.blue, for: .normal)
@@ -161,36 +79,7 @@ class FirstView: UIViewController {
         return categoryButton
     }()
     
-    private func quizDifficultyConstraint() {
-        let leading = quizDifficulty.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 30)
-        let top = quizDifficulty.topAnchor.constraint(equalTo: selectedCategory.bottomAnchor)
-        let width = quizDifficulty.widthAnchor.constraint(equalToConstant: 150)
-        let heigth = quizDifficulty.heightAnchor.constraint(equalToConstant: 80)
-        
-        NSLayoutConstraint.activate([leading, top, width, heigth])
-        
-    }
-    
-    @objc private func chooseDifficulty() -> UIMenu {
-        let difficulties = UIMenu(title: "", options: .displayInline, children: [
-            UIAction(title: "Easy") { _ in
-                self.vm.selectedDifficulty = "easy"
-                self.selectedDifficulty.text = "Easy"
-            },
-            UIAction(title: "Medium") { _ in
-                self.vm.selectedDifficulty = "medium"
-                self.selectedDifficulty.text = "Medium"
-            },
-            UIAction(title: "Hard"){ _ in
-                self.vm.selectedDifficulty = "hard"
-                self.selectedDifficulty.text = "Hard"
-            }
-        ])
-        return difficulties
-        
-    }
-
-    private var selectedDifficulty: UILabel = {
+    private lazy var selectedDifficulty: UILabel = {
         
         var selected = UILabel()
         
@@ -201,17 +90,6 @@ class FirstView: UIViewController {
         selected.translatesAutoresizingMaskIntoConstraints = false
         return selected
     }()
-    
-    private func selectedDifficultyConstraint() {
-        let leading = selectedDifficulty.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 30)
-        let top = selectedDifficulty.topAnchor.constraint(equalTo: quizDifficulty.bottomAnchor, constant: 0)
-        let width = selectedDifficulty.widthAnchor.constraint(equalToConstant: 150)
-        let heigth = selectedDifficulty.heightAnchor.constraint(equalToConstant: 40)
-        
-        NSLayoutConstraint.activate([leading, top, width, heigth])
-        
-    }
-    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -240,7 +118,128 @@ class FirstView: UIViewController {
         
     }
     
+    private func mainTitleConstraint() {
+        let leading = mainTitle.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 30)
+        let top = mainTitle.topAnchor.constraint(equalTo: view.topAnchor, constant: 20)
+        let width = mainTitle.widthAnchor.constraint(equalToConstant: 350)
+        let heigth = mainTitle.heightAnchor.constraint(equalToConstant: 350)
+        
+        NSLayoutConstraint.activate([leading, top, width, heigth])
+        
+    }
     
+    private func quizCategoryConstraint() {
+        let leading = quizCategory.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 30)
+        let top = quizCategory.topAnchor.constraint(equalTo: mainTitle.bottomAnchor, constant: 20)
+        let width = quizCategory.widthAnchor.constraint(equalToConstant: 150)
+        let heigth = quizCategory.heightAnchor.constraint(equalToConstant: 80)
+        
+        NSLayoutConstraint.activate([leading, top, width, heigth])
+        
+    }
+    
+    private func startButtonConstraint() {
+        let center = startButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 150)
+        let bottom = startButton.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -30)
+        let width = startButton.widthAnchor.constraint(equalToConstant: 100)
+        let heigth = startButton.heightAnchor.constraint(equalToConstant: 40)
+        
+        NSLayoutConstraint.activate([center, bottom, width, heigth])
+        
+    }
+    
+    private func selectedCategoryConstraint() {
+        let leading = selectedCategory.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 30)
+        let top = selectedCategory.topAnchor.constraint(equalTo: quizCategory.bottomAnchor, constant: 0)
+        let width = selectedCategory.widthAnchor.constraint(equalToConstant: 150)
+        let heigth = selectedCategory.heightAnchor.constraint(equalToConstant: 40)
+        
+        NSLayoutConstraint.activate([leading, top, width, heigth])
+        
+    }
+    
+    private func quizDifficultyConstraint() {
+        let leading = quizDifficulty.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 30)
+        let top = quizDifficulty.topAnchor.constraint(equalTo: selectedCategory.bottomAnchor)
+        let width = quizDifficulty.widthAnchor.constraint(equalToConstant: 150)
+        let heigth = quizDifficulty.heightAnchor.constraint(equalToConstant: 80)
+        
+        NSLayoutConstraint.activate([leading, top, width, heigth])
+        
+    }
+    
+    private func selectedDifficultyConstraint() {
+        let leading = selectedDifficulty.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 30)
+        let top = selectedDifficulty.topAnchor.constraint(equalTo: quizDifficulty.bottomAnchor, constant: 0)
+        let width = selectedDifficulty.widthAnchor.constraint(equalToConstant: 150)
+        let heigth = selectedDifficulty.heightAnchor.constraint(equalToConstant: 40)
+        
+        NSLayoutConstraint.activate([leading, top, width, heigth])
+        
+    }
+    
+    @objc private func chooseCategory() -> UIMenu {
+
+            let category = UIMenu(title: "", options: .displayInline, children: [
+                UIAction(title: "🏀 Sports") { _ in
+                    self.vm.selectedCategory = "Sports 🏀"
+                    self.selectedCategory.text = "🏀 Sports"
+                },
+                UIAction(title: "🦁 Animals") { _ in
+                    self.vm.selectedCategory = "Animals 🦁"
+                    self.selectedCategory.text = "🦁 Animals"
+                    
+                },
+                UIAction(title: "📖 Books") { _ in
+                    self.vm.selectedCategory = "Books 📖"
+                    self.selectedCategory.text = "📖 Books"
+                },
+                UIAction(title: "🎥 Film") { _ in
+                    self.vm.selectedCategory = "Film 🎥"
+                    self.selectedCategory.text = "🎥 Film"
+                },
+                UIAction(title: "🎼 Music") { _ in
+                    self.vm.selectedCategory = "Music 🎼"
+                    self.selectedCategory.text = "🎼 Music"
+                },
+                UIAction(title: "🚗 Vehicles") { _ in
+                    self.vm.selectedCategory = "Vehicles 🚗"
+                    self.selectedCategory.text = "🚗 Vehicles"
+                }
+            ])
+            return category
+    }
+    
+    @objc private func chooseDifficulty() -> UIMenu {
+        let difficulties = UIMenu(title: "", options: .displayInline, children: [
+            UIAction(title: "Easy") { _ in
+                self.vm.selectedDifficulty = "easy"
+                self.selectedDifficulty.text = "Easy"
+            },
+            UIAction(title: "Medium") { _ in
+                self.vm.selectedDifficulty = "medium"
+                self.selectedDifficulty.text = "Medium"
+            },
+            UIAction(title: "Hard"){ _ in
+                self.vm.selectedDifficulty = "hard"
+                self.selectedDifficulty.text = "Hard"
+            }
+        ])
+        return difficulties
+        
+    }
+
+    @objc func startQuiz() {
+        let main = MainView(vm: vm)
+        
+        
+        self.vm.score = 0
+        self.navigationController?.pushViewController(main, animated: true)
+
+        
+    }
+
+
 }
 
 

@@ -8,9 +8,9 @@
 import UIKit
 
 class ResultsView: UIViewController {
-    var vm = QuestionViewModel()
+    lazy var vm = QuestionViewModel()
 
-    var seeResults: UILabel = {
+    lazy var seeResults: UILabel = {
         
         let results = UILabel()
         results.textAlignment = .center
@@ -19,17 +19,8 @@ class ResultsView: UIViewController {
         results.translatesAutoresizingMaskIntoConstraints = false
         return results
     }()
-    
-    func resultConstraint() {
-        let leading = seeResults.centerXAnchor.constraint(equalTo: view.centerXAnchor)
-        let top = seeResults.centerYAnchor.constraint(equalTo: view.centerYAnchor, constant: -100)
-        let width = seeResults.widthAnchor.constraint(equalToConstant: 300)
-        let height = seeResults.heightAnchor.constraint(equalToConstant: 300)
         
-        NSLayoutConstraint.activate([leading, top, width, height])
-    }
-    
-    var backHome: UIButton = {
+    lazy var backHome: UIButton = {
         let home = UIButton()
         home.setTitle("Start Over", for: .normal)
         home.setTitleColor(.black, for: .normal)
@@ -41,16 +32,7 @@ class ResultsView: UIViewController {
         home.translatesAutoresizingMaskIntoConstraints = false
         return home
     }()
-    
-    func backHomeButtonConstraint() {
-        let leading = backHome.centerXAnchor.constraint(equalTo: view.centerXAnchor, constant: 0)
-        let top = backHome.topAnchor.constraint(equalTo: seeResults.bottomAnchor, constant: 200)
-        let width = backHome.widthAnchor.constraint(equalToConstant: 150)
-        let height = backHome.heightAnchor.constraint(equalToConstant: 50)
-        
-        NSLayoutConstraint.activate([leading, top, width, height])
-    }
-    
+
     @objc func returnHome() {
         print(navigationController!.viewControllers)
         
@@ -64,7 +46,7 @@ class ResultsView: UIViewController {
         self.view.backgroundColor = .systemCyan
         
         self.view.addSubview(seeResults)
-        self.seeResults.text = /*"Your score is \n 9 out of 10"*/  "Your score is \n \(vm.score) out of \(vm.questionModel.count)"
+        self.seeResults.text = "Your score is \n \(vm.score) out of \(vm.questionModel.count)"
         self.view.addSubview(backHome)
         self.navigationItem.hidesBackButton = true
         self.backHome.addTarget(self, action: #selector(returnHome), for: .touchUpInside)
@@ -75,8 +57,23 @@ class ResultsView: UIViewController {
             
         }
     }
-    
-    
+    func resultConstraint() {
+        let leading = seeResults.centerXAnchor.constraint(equalTo: view.centerXAnchor)
+        let top = seeResults.centerYAnchor.constraint(equalTo: view.centerYAnchor, constant: -100)
+        let width = seeResults.widthAnchor.constraint(equalToConstant: 300)
+        let height = seeResults.heightAnchor.constraint(equalToConstant: 300)
+        
+        NSLayoutConstraint.activate([leading, top, width, height])
+    }
+
+    func backHomeButtonConstraint() {
+        let leading = backHome.centerXAnchor.constraint(equalTo: view.centerXAnchor, constant: 0)
+        let top = backHome.topAnchor.constraint(equalTo: seeResults.bottomAnchor, constant: 200)
+        let width = backHome.widthAnchor.constraint(equalToConstant: 150)
+        let height = backHome.heightAnchor.constraint(equalToConstant: 50)
+        
+        NSLayoutConstraint.activate([leading, top, width, height])
+    }
     
 }
 
