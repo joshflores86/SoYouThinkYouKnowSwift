@@ -87,7 +87,6 @@ class MainView: UIViewController {
         self.navigationItem.hidesBackButton = true
         view.backgroundColor = .systemMint
         nextButton.addTarget(self, action: #selector(nextQuestion), for: .touchUpInside)
-        
         self.view.addSubview(questionLabel)
         self.view.addSubview(nextButton)
         self.view.addSubview(newTitle)
@@ -103,6 +102,8 @@ class MainView: UIViewController {
             
         }
     }
+    
+    
     
     func questionLabelContraint() {
         let leading = questionLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20)

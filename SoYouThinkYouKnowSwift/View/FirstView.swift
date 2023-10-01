@@ -188,7 +188,6 @@ class FirstView: UIViewController {
                 UIAction(title: "🦁 Animals") { _ in
                     self.vm.selectedCategory = "Animals 🦁"
                     self.selectedCategory.text = "🦁 Animals"
-                    
                 },
                 UIAction(title: "📖 Books") { _ in
                     self.vm.selectedCategory = "Books 📖"
@@ -231,12 +230,8 @@ class FirstView: UIViewController {
 
     @objc func startQuiz() {
         let main = MainView(vm: vm)
-        
-        
         self.vm.score = 0
         self.navigationController?.pushViewController(main, animated: true)
-
-        
     }
 
 

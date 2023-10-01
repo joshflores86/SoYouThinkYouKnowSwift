@@ -66,6 +66,8 @@ class QuestionViewModel: ObservableObject {
     
     func scoreKeeper() {
         score += 1
+        
+        
     }
     
 }
